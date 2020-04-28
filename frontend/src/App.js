@@ -59,7 +59,7 @@ class App extends Component {
   loginHandler = (event, authData) => {
     event.preventDefault();
     this.setState({ authLoading: true });
-    fetch('URL')
+    fetch('http://localhost:3000/login')
       .then(res => {
         if (res.status === 422) {
           throw new Error('Validation failed.');
@@ -100,7 +100,7 @@ class App extends Component {
   signupHandler = (event, authData) => {
     event.preventDefault();
     this.setState({ authLoading: true });
-    fetch('URL')
+    fetch('http://localhost:3000/signup')
       .then(res => {
         if (res.status === 422) {
           throw new Error(
@@ -142,7 +142,7 @@ class App extends Component {
     let routes = (
       <Switch>
         <Route
-          path="/"
+          path="/login"
           exact
           render={props => (
             <LoginPage
@@ -163,21 +163,21 @@ class App extends Component {
             />
           )}
         />
-        <Redirect to="/" />
+        <Redirect to="/login" />
       </Switch>
     );
     if (this.state.isAuth) {
       routes = (
         <Switch>
           <Route
-            path="/"
+            path="/articles"
             exact
             render={props => (
               <FeedPage userId={this.state.userId} token={this.state.token} />
             )}
           />
           <Route
-            path="/:postId"
+            path="article/:postId"
             render={props => (
               <SinglePostPage
                 {...props}
@@ -186,7 +186,7 @@ class App extends Component {
               />
             )}
           />
-          <Redirect to="/" />
+          <Redirect to="/articles" />
         </Switch>
       );
     }
