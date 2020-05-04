@@ -1,19 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const routes = require('./routes/route');
 
-/*const graphqlHTTP = require('express-graphql');
-const graphqlSchema = require('./graphql/schema');
-const graphqlResolver = require('./graphql/resolver');*/
-
-
 const app = express();
-const port = process.env.PORT || 8080;
-const URI = 'mongodb+srv://jech:jech@apimds-yf4w2.mongodb.net/test?retryWrites=true&w=majority' ;
+
+dotenv.config();
+
+const port = process.env.PORT;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 routes(app);
 
@@ -24,18 +24,9 @@ app.use((req, res, next) => {
     next();
 });
 
-
-/*app.use(
-  '/graphql', graphqlHTTP({
-    schema: graphqlSchema,
-    rootValue: graphqlResolver,
-    graphiql: true
-  })
-);*/
-
 mongoose
   .connect(
-    URI,
+    process.env.DB_CONNECT,
     { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
   )
   .then(result => {

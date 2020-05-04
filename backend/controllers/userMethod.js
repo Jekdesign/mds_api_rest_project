@@ -1,4 +1,3 @@
-//const bcrypt = require('bcrypt');
 const userItem = require('../models/userModel');
 const mongoose = require('mongoose');
 const UserItem = mongoose.model('UserItem', userItem);
@@ -35,38 +34,7 @@ const userListController = {
         UserItem.findByIdAndRemove(req.params.id, (err, userItem) => {
             return respond(err, userItem, res);
         });
-    },
-
-    
-    /*postSignup: async (req, res, next) => {
-        try {
-            const {
-                name,
-                email,
-                password
-            } = req.body;
-            const saltRounds = 10;
-            const salt = bcrypt.genSaltSync(saltRounds);
-            const hashPass = bcrypt.hashSync(password, salt);
-            const registration = new UserItem({
-                name,
-                email,
-                password: hashPass
-            });
-
-            await registration.save((err, savedUserItem) => {
-                return respond(err, savedUserItem, res);
-            });
-        } catch (err) {
-            res.status(500).send(err);
-        }
-    },
-
-    postLogin: (req, res, next) => {
-        UserItem.findOne(req.body, (err, userItem) => {
-            return respond(err, userItem, res);
-        });
-    },*/
+    }
 };
 
 

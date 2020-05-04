@@ -59,7 +59,18 @@ class App extends Component {
   loginHandler = (event, authData) => {
     event.preventDefault();
     this.setState({ authLoading: true });
-    fetch('http://localhost:3000/login')
+    fetch('http://localhost:8080/api/login', {
+      method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        body: JSON.stringify({
+          email: authData.email,
+          password: authData.password,
+        })
+    })
       .then(res => {
         if (res.status === 422) {
           throw new Error('Validation failed.');
@@ -68,7 +79,7 @@ class App extends Component {
           console.log('Error!');
           throw new Error('Could not authenticate you!');
         }
-        return res.json();
+        res.json();
       })
       .then(resData => {
         console.log(resData);
@@ -100,7 +111,19 @@ class App extends Component {
   signupHandler = (event, authData) => {
     event.preventDefault();
     this.setState({ authLoading: true });
-    fetch('http://localhost:3000/signup')
+    fetch('http://localhost:8080/api/signup', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors',
+      body: JSON.stringify({
+        name: authData.signupForm.name.value,
+        email: authData.signupForm.email.value,
+        password: authData.signupForm.password.value,
+      })
+    })
       .then(res => {
         if (res.status === 422) {
           throw new Error(
@@ -142,7 +165,7 @@ class App extends Component {
     let routes = (
       <Switch>
         <Route
-          path="/login"
+          path="/api/login"
           exact
           render={props => (
             <LoginPage
@@ -153,7 +176,7 @@ class App extends Component {
           )}
         />
         <Route
-          path="/signup"
+          path = "/api/signup"
           exact
           render={props => (
             <SignupPage
@@ -163,21 +186,21 @@ class App extends Component {
             />
           )}
         />
-        <Redirect to="/login" />
+        <Redirect to="/api/login" />
       </Switch>
     );
     if (this.state.isAuth) {
       routes = (
         <Switch>
           <Route
-            path="/articles"
+            path = "/api/articles"
             exact
             render={props => (
               <FeedPage userId={this.state.userId} token={this.state.token} />
             )}
           />
           <Route
-            path="article/:postId"
+            path = "/api/article/:postId"
             render={props => (
               <SinglePostPage
                 {...props}
@@ -186,7 +209,7 @@ class App extends Component {
               />
             )}
           />
-          <Redirect to="/articles" />
+          <Redirect to="/api/articles" />
         </Switch>
       );
     }
@@ -197,7 +220,7 @@ class App extends Component {
         )}
         <ErrorHandler error={this.state.error} onHandle={this.errorHandler} />
         <Layout
-          header={
+          header={  
             <Toolbar>
               <MainNavigation
                 onOpenMobileNav={this.mobileNavHandler.bind(this, true)}
