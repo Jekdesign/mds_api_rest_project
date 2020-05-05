@@ -1,10 +1,11 @@
-const authController = require('../controllers/authMethod');
-const userController = require('../controllers/userMethod');
-const postController = require('../controllers/articleMethod');
-const withAuth = require('../middleware');
+
 
 
 module.exports = (app) => {
+  const authController = require('../controllers/authMethod');
+  const userController = require('../controllers/userMethod');
+  const postController = require('../controllers/articleMethod');
+  const withAuth = require('../middleware');
   // auth route
   app.route('/api/signup', withAuth).post(authController.postSignup);
   app.route('/api/login', withAuth).post(authController.postLogin);
